@@ -1,0 +1,89 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FastAPI Blog</title>
+
+<style>
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin:0;
+    background:#f4f6f9;
+}
+
+header{
+    background:#2c3e50;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+.container{
+    width:70%;
+    margin:40px auto;
+}
+
+.blog{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.blog h2{
+    margin-bottom:10px;
+    color:#333;
+}
+
+.blog p{
+    color:#555;
+}
+
+.delete-btn{
+    background:#e74c3c;
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.delete-btn:hover{
+    background:#c0392b;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>FastAPI Blog List</h1>
+</header>
+{% if message %}
+<p style="color:green; font-weight:bold;">
+    {{ message }}
+</p>
+{% endif %}
+<div class="container">
+
+{% for blog in blogs %}
+
+    <div class="blog">
+        <h2>{{ blog.title }}</h2>
+        <p>{{ blog.body }}</p>
+
+        <form action="/delete/{{ blog.id }}" method="post">
+            <button class="delete-btn">Delete</button>
+        </form>
+    </div>
+
+{% endfor %}
+
+</div>
+
+</body>
+</html>
