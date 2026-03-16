@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FastAPI Blog</title>
+<title>Blog List</title>
 
 <style>
 
@@ -54,7 +54,18 @@ header{
 .delete-btn:hover{
     background:#c0392b;
 }
-
+.update-btn{
+    background:#369bd5;
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:5px;
+    cursor:pointer;
+    margin-top: 6px;
+}
+.update-btn:hover{
+    background:#368e98;
+}
 </style>
 </head>
 
@@ -79,10 +90,11 @@ header{
         <form action="/delete/{{ blog.id }}" method="post">
             <button class="delete-btn">Delete</button>
         </form>
+        <form action="/edit/{{ blog.id }}" method="get">
+            <button class="update-btn">Update</button>
+        </form>
     </div>
-
 {% endfor %}
-
 </div>
 
 </body>

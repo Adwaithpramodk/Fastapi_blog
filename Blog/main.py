@@ -17,6 +17,9 @@ def get_db():
         yield db
     finally:
         db.close()
+@app.get('/',response_class=HTMLResponse)
+def index(request:Request):
+    return templates.TemplateResponse("index.html",{"request":request}) 
 
 @app.get('/list',response_class=HTMLResponse)
 def get_blogs(request: Request,db:Session = Depends(get_db)):
@@ -36,13 +39,7 @@ def create_blog(request:Request,title:str = Form(...),body:str = Form(...),db:Se
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
-    return templates.TemplateResponse(
-        "create_blog.html",
-        {
-            "request":request,
-            "message":"Blog Saved SuccessFully"
-        }
-    )
+    return RedirectResponse(url="/list", status_code=303)
 @app.post('/delete/{id}',response_class=HTMLResponse)
 def delete_blog(request:Request,id:int,db:Session = Depends(get_db)):
     blog = db.query(models.Blogs).filter(models.Blogs.id == id).first()
@@ -53,12 +50,20 @@ def delete_blog(request:Request,id:int,db:Session = Depends(get_db)):
         db.commit()
         return RedirectResponse(url='/list',status_code=303) #redirect to the same page
     
-@app.put('/update/{id}',status_code=status.HTTP_202_ACCEPTED)
-def update_blog(request:schemas.Blog,id:int,db:Session = Depends(get_db)): 
-    blog = db.query(models.Blogs).filter(models.Blogs.id == id)
-    if not blog.first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"Blog with{id} not found")
-    blog.update(request.dict())
+@app.get('/edit/{id}',response_class=HTMLResponse)
+def show_edit(request:Request,id:int,db:Session = Depends(get_db)):
+    blog = db.query(models.Blogs).filter(models.Blogs.id == id).first()
+    if not blog:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="No specific blog Found")
+    else:
+        return templates.TemplateResponse("update.html",{"request":request,"blogs":blog})
+
+@app.post('/update/{id}',status_code=status.HTTP_202_ACCEPTED,response_class=HTMLResponse)
+def update_blog(request:Request,id:int,title:str = Form(...),body:str = Form(...),db:Session = Depends(get_db)): 
+    update_blog = db.query(models.Blogs).filter(models.Blogs.id == id).first()
+    update_blog.title = title
+    update_blog.body = body
     db.commit()
-    return f"The blog with {id} id updated"
+    blog = db.query(models.Blogs.id.desc()).all()
+    return RedirectResponse(url="/list", status_code=303)
 

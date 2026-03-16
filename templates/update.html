@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Update Blog</title>
+
+<style>
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin:0;
+    background:#f4f6f9;
+}
+
+header{
+    background:#2c3e50;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+.container{
+    width:60%;
+    margin:40px auto;
+}
+
+.form-box{
+    background:white;
+    padding:25px;
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+label{
+    font-weight:bold;
+    display:block;
+    margin-top:15px;
+}
+
+input, textarea{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border-radius:5px;
+    border:1px solid #ccc;
+}
+
+textarea{
+    resize:none;
+}
+
+button{
+    margin-top:20px;
+    background:#3498db;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#2980b9;
+}
+
+.back{
+    display:inline-block;
+    margin-top:15px;
+    text-decoration:none;
+    color:#333;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>Update Blog</h1>
+</header>
+
+<div class="container">
+
+<div class="form-box">
+
+<form action="/update/{{blogs.id }}" method="post">
+
+<label>Title</label>
+<input type="text" name="title" value="{{ blogs.title }}" required>
+
+<label>Body of the Blog</label>
+<textarea name="body" rows="6" required>{{ blogs.body }}</textarea>
+
+<button type="submit">Submit</button>
+
+</form>
+
+</div>
+<center>
+    {% if message  %}
+<p style="color:green; font-weight:bold;">
+    {{ message }}
+</p>
+{% endif %}
+</center>
+</div>
+
+</body>
+</html>
